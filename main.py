@@ -48,4 +48,4 @@ async def copy(ctx):
     json_write("./copy.json",copied)
     await ctx.send("copied",ephemeral=True)
 
-bot.run("MTEyMDM4OTkzMDkzNDM0NTgxOQ.GBIxS9.uMmR84GcrSi82lrbgS2HjilL4E5LJgydL1mZGQ")
+bot.run("")
