@@ -25,7 +25,7 @@ def json_read(filename):
 @bot.event
 async def on_ready():
     print(f"Logged on as {bot.user}!")
-    await bot.change_presence(status=disnake.Status.idle)
+    await bot.change_presence(status=disnake.Status.idle,activity=disnake.Activity(name="custom",type=disnake.ActivityType.custom,state="Apps -> Copy | /paste"))
 
 
 @bot.slash_command()
@@ -53,19 +53,23 @@ async def paste(ctx):
     if copied_user.display_name != None:
         copied_user_name = copied_user.display_name
     await webhook.send(
-        content=f"{copied_object["copied_content"]}\n-# Pasted by {ctx.author.mention}",
+        content=f"{copied_object["copied_content"]}",
         username=copied_user_name,
         avatar_url=copied_user.display_avatar.url,
-        allowed_mentions=disnake.AllowedMentions.none()
+        allowed_mentions=disnake.AllowedMentions.none(),
+        embed=disnake.Embed(title=None,description=f"Pasted by {ctx.author.mention}")
     )
     await ctx.send(content="Message successfully pasted!", ephemeral=True)
 
 @bot.slash_command(name="colon_three")
 async def cthr(ctx):
-    await ctx.channel.send(f":3 from {ctx.author.mention}")
+    await ctx.channel.send(f":3\n-# From {ctx.author.mention}")
     await ctx.send(":3 sent",ephemeral=True)
 @bot.message_command(name="Copy")
 async def copy(ctx):
+    if ctx.target.webhook_id != None:
+        await ctx.send("<:x_:1344624265839775764> You can't copy webhooks!",ephemeral=True)
+        return
     copied = json_read("./copy.json")
     obj = {
         "copied_by": ctx.author.id,
@@ -75,6 +79,10 @@ async def copy(ctx):
     copied.append(obj)
     json_write("./copy.json", copied)
     await ctx.send("Message successfully copied!", ephemeral=True)
+    try:
+        await ctx.target.author.send(content=f"## Your message has been copied\n{ctx.author.mention} has copied your message.\n-# Message copied: {ctx.target.jump_url}")
+    except:
+        print("couldn't notify!")
 
 bot.run(os.environ["COPY_TOKEN"])
 
