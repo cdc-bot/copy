@@ -1,6 +1,7 @@
 import disnake
 from disnake.ext import commands
 import json
+import os
 
 intents = disnake.Intents.all()
 bot = commands.Bot(intents=intents, command_prefix="c!")
@@ -24,6 +25,7 @@ def json_read(filename):
 @bot.event
 async def on_ready():
     print(f"Logged on as {bot.user}!")
+    await bot.change_presence(status=disnake.Status.idle)
 
 
 @bot.slash_command()
@@ -74,5 +76,5 @@ async def copy(ctx):
     json_write("./copy.json", copied)
     await ctx.send("Message successfully copied!", ephemeral=True)
 
-
+bot.run(os.environ["COPY_TOKEN"])
 
