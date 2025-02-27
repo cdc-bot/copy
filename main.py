@@ -6,6 +6,7 @@ import os
 intents = disnake.Intents.all()
 bot = commands.Bot(intents=intents, command_prefix="c!")
 
+ENABLE_SNITCHING = False
 
 def json_write(filename, data):
     json_data = json.dumps(data)
@@ -85,10 +86,12 @@ async def copy(ctx):
     copied.append(obj)
     json_write("./copy.json", copied)
     await ctx.send("Message successfully copied!", ephemeral=True)
+    if not ENABLE_SNITCHING:
+        return
     try:
         await ctx.target.author.send(content=f"## Your message has been copied\n{ctx.author.mention} has copied your message.\n-# Message copied: {ctx.target.jump_url}")
     except:
-        print("couldn't notify!")
+        print(f"couldn't notify {ctx.target.author}!")
 try:
     bot.run(os.environ["COPY_TOKEN"])
 except:
