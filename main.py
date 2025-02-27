@@ -82,6 +82,9 @@ async def copy(ctx):
         await ctx.target.author.send(content=f"## Your message has been copied\n{ctx.author.mention} has copied your message.\n-# Message copied: {ctx.target.jump_url}")
     except:
         print("couldn't notify!")
-
-bot.run(os.environ["COPY_TOKEN"])
+try:
+    bot.run(os.environ["COPY_TOKEN"])
+except:
+    print("bot.run execution failed!")
+    print("This is likely because you do not have the 'COPY_TOKEN' environment variable set.")
 
