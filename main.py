@@ -27,7 +27,6 @@ async def on_ready():
     print(f"Logged on as {bot.user}!")
     await bot.change_presence(status=disnake.Status.idle,activity=disnake.Activity(name="custom",type=disnake.ActivityType.custom,state="Apps -> Copy | /paste"))
 
-
 @bot.slash_command()
 async def paste(ctx):
     copied = json_read("./copy.json")
@@ -48,7 +47,7 @@ async def paste(ctx):
         webhook = await ctx.channel.create_webhook(
             name="Copy Helper", reason="Create webhook for paste command."
         )
-    copied_user = await bot.fetch_user(copied_object["copied_person"])
+    copied_user = await ctx.guild.fetch_member(copied_object["copied_person"])
     copied_user_name = copied_user.name
     if copied_user.display_name != None:
         copied_user_name = copied_user.display_name
