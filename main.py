@@ -15,11 +15,18 @@ def json_write(filename, data):
 
 
 def json_read(filename):
-    file = open(filename, "r")
-    file_c = file.read()
-    file.close()
-    data = json.loads(file_c)
-    return data
+    try:
+        file = open(filename, "r")
+        file_c = file.read()
+        file.close()
+        data = json.loads(file_c)
+        return data
+    except:
+        print(f"{filename} doesn't exist, creating.")
+        file = open(filename, "w")
+        file.write("[]")
+        file.close()
+        return []
 
 
 @bot.event
